@@ -41,7 +41,7 @@ return {
 
     // Create new ID
     if (data.allItems[type].length > 0) {
-      ID = data.allItem[type][data.allItems[type].length - 1].id + 1
+      ID = data.allItems[type][data.allItems[type].length - 1].id + 1
     } else {
       ID = 0;
     }
@@ -58,6 +58,20 @@ return {
 
     // Return element
     return newItem;
+    console.log(newItem);
+  },
+
+  deleteItem: function(type, id) {
+    var ids, index;
+    ids = data.allItems[type].map(function(current) {
+      return current.id;
+    });
+
+    index = ids.indexOf(id);
+
+    if (index !== -1) {
+      data.allItems[type].splice(index, 1);
+    }
   },
 
   calculateBudget: function() {
@@ -150,6 +164,11 @@ var UIController = (function() {
 
     },
 
+    deleteListItem: function(selectorID) {
+      var el = document.getElementById(selectorID);
+      el.parentNode.removeChild(el);
+    },
+
     clearFields: function() {
       var fields, fieldsArray;
 
@@ -202,10 +221,10 @@ var controller = (function(budgetCtrl, UICtrl) {
   var updateBudget = function() {
 
     // 1. Calculate the budget
-    budgetController.calculateBudget();
+    budgetCtrl.calculateBudget();
 
     // 2. Return the budget
-    var budget = budgetController.getBudget();
+    var budget = budgetCtrl.getBudget();
 
     // 3. Display the budget on the UI
     UICtrl.displayBudget(budget);
@@ -244,7 +263,13 @@ var controller = (function(budgetCtrl, UICtrl) {
     if (itemID) {
       splitID = itemID.split('-');
       type = splitID[0];
-      ID = splitID[1];
+      ID = parseInt(splitID[1]);
+
+      budgetCtrl.deleteItem(type, ID);
+
+      UICtrl.deleteListItem(itemID);
+
+      updateBudget();
     }
   };
 
