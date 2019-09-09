@@ -13,5 +13,5 @@ git clone git@github.com:anansilva/budget-app-js
 ## Running locally
 
 ```bash
-Open index.html
+open index.html
 ```
